@@ -7,7 +7,9 @@ import com.haru.domain.Criteria;
 
 public interface BoardService {
 
-	public List<BoardDTO> getList(Criteria criteria); //ページングList
+	public List<BoardDTO> getList(Criteria cri); //ページングList
 	
-	public int getTotal(Criteria criteria);
+	public int getTotalCount(Criteria cri);
+	
+	
 }

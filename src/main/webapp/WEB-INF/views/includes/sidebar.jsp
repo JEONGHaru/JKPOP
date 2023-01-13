@@ -46,7 +46,7 @@
                 </a>
                 <div id="collapseKorea" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Custom Components:</h6>
+                        <h6 class="collapse-header">韓国アーティスト:</h6>
                          <a class="collapse-item" href="buttons.html">２０２０年代</a>
                         <a class="collapse-item" href="cards.html">２０１０年代</a>
                         <a class="collapse-item" href="cards.html">２０００年代</a>
@@ -62,7 +62,7 @@
                 </a>
                 <div id="collapseJapan" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Custom Components:</h6>
+                        <h6 class="collapse-header">日本アーティスト</h6>
                         <a class="collapse-item" href="buttons.html">２０２０年代</a>
                         <a class="collapse-item" href="cards.html">２０１０年代</a>
                         <a class="collapse-item" href="cards.html">２０００年代</a>
@@ -74,7 +74,7 @@
             <li class="nav-item">
                 <a class="nav-link" href="/board/list">
                     <i class="fas fa-fw fa-table"></i>
-                    <span>Tables</span></a>
+                    <span>掲示板</span></a>
             </li>
             <!-- Divider -->
             <hr class="sidebar-divider">

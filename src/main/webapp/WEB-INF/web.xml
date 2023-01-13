@@ -23,6 +23,18 @@
 			<param-value>/WEB-INF/spring/appServlet/servlet-context.xml</param-value>
 		</init-param>
 		<load-on-startup>1</load-on-startup>
+		
+		<!-- 첨부파일 설정 데이터 저장파일 : web.xml 또는 servlet-context.xml : multipartResolver에 설정 -->
+		<multipart-config>
+		<!-- 용량이 작으면 Main Memory를 사용.용량이 커지면 location폴더에 파일로 저장한후 사용이 끝나면 사라진다 -->
+			<location>/Users/jeong-gwang-yeong/Desktop/upload/tmp</location>
+			<!-- 1024*1024*20 : 파일 한개의 용량제한 - 20MB-->
+			<max-file-size>20971520</max-file-size>
+			<!-- 전체 파일 사이즈 - 400MB -->
+			<max-request-size>419430400</max-request-size>
+			<!-- 20MB이하면 메모리 초과하면 파일 -->
+			<file-size-threshold>20971520</file-size-threshold>
+		</multipart-config>
 	</servlet>
 		
 	<servlet-mapping>
