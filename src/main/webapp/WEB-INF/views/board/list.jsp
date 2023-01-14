@@ -9,6 +9,10 @@
 ul{
 	list-style:none;
 }
+a:hover {
+  text-decoration: none !important;
+  cursor:pointer;
+}
 </style>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -83,8 +87,8 @@ ul{
                                     <tbody>
                                     	<c:forEach var="board" items="${list}">
                                         <tr>
-                                            <td>${board.bno }</td>
-                                            <td>${board.title }</td>
+                                            <td class="bno">${board.bno }</td>
+                                            <td><a class="boardLink">${board.title }</a></td>
                                             <td>${board.writer }</td>
                                             <td><fmt:formatDate value="${board.regDate }" pattern="yyyy-MM-dd"/></td>
                                         </tr>
@@ -166,6 +170,16 @@ ul{
 			//actionForm.find("input[name=pageNum]")
 			$("#pageNum").val($(this).attr("href"));
 			$("#actionForm").submit();
+		});
+		
+		$(".boardLink").on("click",function(e){
+			//alert("click!");
+			var bno = $(this).parents("td").prev().text();
+			$("#actionForm")
+			.prepend("<input type='hidden' name='bno' value='"+bno+"'>")
+			.attr("action","detail")
+			.submit();
+			console.log(bno);
 		});
 		
 	});//function()--end

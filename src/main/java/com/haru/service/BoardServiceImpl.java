@@ -31,4 +31,36 @@ public class BoardServiceImpl implements BoardService {
 		return mapper.getTotalCount(cri);
 	}
 
+	@Override
+	public int insert(BoardDTO dto) {
+
+		log.info("BaordService insert---------------- BoardDTO : " + dto);
+		
+		
+		return mapper.insert(dto);
+	}
+
+	@Override
+	public BoardDTO getDetail(int bno) {
+		
+		log.info("BaordService getDetail----------------  bno : " +  bno);
+		
+		return  mapper.getBoard(bno);
+	}
+
+	@Override
+	public boolean update(BoardDTO dto) {
+		log.info("BaordService update----------------  dto : " +  dto);
+		
+		return mapper.update(dto) ==1;
+		
+	}
+
+	@Override
+	public boolean delete(int bno) {
+		log.info("BaordService delete----------------  bno : " +  bno);
+		
+		return mapper.delete(bno) == 1;
+	}
+
 }

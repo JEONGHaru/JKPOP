@@ -27,10 +27,6 @@
     <!-- Custom styles for this template-->
     <link href="/resources/pages/css/sb-admin-2.min.css" rel="stylesheet">
 <style type="text/css">
-.deleteX:hover{
-	cursor:pointer;
-	color:red;
-}
 ul{
 list-style:none;
 }
@@ -40,88 +36,23 @@ textarea {
     border: none;
     resize: none;
   }
-</style>    
+</style>
 <script type="text/javascript">
 	$(function(){
-		var uploadResult = $(".uploadResult ul");
-		function showUploadFile(list){
-			var str = "";
-			$(list).each(function(i,obj){
-				str +=  "<li data-path='"+obj.uploadPath+"' data-uuid='"+obj.uuid+"' data-filename='"+obj.fileName
-				+"' data-type='"+obj.image+"'>";
-				str += "<div>";
-				if(!obj.image){
-					var fileCallPath = encodeURIComponent(obj.uploadPath +"/"+obj.uuid+"_"+obj.fileName);
-				str += obj.fileName
-				}else{
-					//이미지의 경우
-					//불러온 파일 정보
-					var fileCallPath = decodeURIComponent(obj.uploadPath +"/s_"+obj.uuid+"_"+obj.fileName);
-					var originPath = obj.uploadPath +"/"+obj.uuid+"_"+obj.fileName
-					console.log("fileCallPath : " +decodeURIComponent(fileCallPath));
-					//originPath = originPath.replace(new RegExp(/\\/g),"/");
-					str += "<img src='/display?fileName="+fileCallPath+"'>";
-			}
-				str += "<span class='deleteX' data-file=\'"+fileCallPath+"\' data-type=\'"+(obj.image?"image":"file")+"\'>";
-				str += " <i class='fa-solid fa-xmark'></i>";
-				str += "</span>";
-				str += "</div>";
-				str += "</li>";
-			});
-			
-			uploadResult.append(str);
-			
-		}// showUploadFile-- end
-		
-		$("input[type='file']").on("change",function(e){
-			//console.log("ファイル選択");
-			var formData = new FormData();
-			console.log(formData);
-			var inputFile = $("input[name='uploadFile']")
-			console.log(inputFile);
-			var files = inputFile[0].files;
-			console.log(files);
-			for(var i = 0; i< files.length; i++){
-				//파일 체크 - 사이즈 , 종
-				formData.append("uploadFile",files[i]);
-			}
-			
-			//서버에 데이터 넘겨서 처리
-			$.ajax({
-				url : "/uploadAjaxAction",
-				processData : false,
-				contentType : false,
-				data : formData,
-				type : "POST",
-				dataType : "JSON",
-				success : function(result){
-					console.log(JSON.stringify(result));
-					//업로드 파일 화면에 보이기
-					showUploadFile(result);
-					//$(".uploadDiv input").val("");
-				}
-			});
-		});//input change -- end
-		$(".uploadResult").on("click",".deleteX",function(e){
-			//alert("Delete Click!")
-			var deleteX = $(this);
-			//서버에 넘겨줄 데이터 수집
-			var targetFile = $(this).data("file");
-			var targetType = $(this).data("type");
-			//console.log(targetFile,targetType);
-			$.ajax({
-				url: '/deleteFile',
-				data : {fileName :targetFile,
-						type : targetType},
-				dataType : 'text', //서버에서 결과로 전달되는 데이텨 형식
-				type : "POST",
-				success : function(result){
-					//alert(result);
-					deleteX.closest("li").remove();
-				}
-			});
-		});// fileDelete Event --end
-	});//function() --end
+		$("button[data-oper='delete']").on("click",function(e){
+			//alert("clilck!")
+			//alert(${param.bno});
+			if(!confirm("정말 삭제 하시겠습니까?")) return false;
+			var bno = ${param.bno};
+			var deleteForm = $("<form></form>")
+			deleteForm.append($("<input>",{name:'bno',value: bno}))
+			deleteForm.attr("method","POST");
+			deleteForm.attr("action","delete");
+			$('body').append(deleteForm);
+			deleteForm.submit();
+			//formData.append(inputBno,"${param.bno}").submit();
+		})
+	});
 </script>    
 </head>
 <!-- side bar -->
@@ -137,19 +68,24 @@ textarea {
 		<!-- /.row -->
 		<div class="row mb-4">
 			<div class="col-lg-12">
-				<form action="write" method="POST">
 				<div class="form-group">
-					<input type="hidden" name="writer" value="haru">
 					<label>Title</label>
-					<input class="form-control mb-3" type="text" name="title" required="required" >
+					<input class="form-control mb-3" type="text" name="title" value="${board.title }" readonly="readonly" >
 					</div>
 					<div class="form-group">
 					<label>content</label>
-					<textarea class="form-control mb-3" rows="3" name="content" required="required" ></textarea>
+					<textarea class="form-control mb-3" rows="3" name="content" readonly="readonly" >${board.content }</textarea>
 					</div>
-					<button type="submit" class="btn btn-primary">作成</button>
-                   	<button type="reset" class="btn btn-success">リセット</button>
-				</form>
+					<div class="form-group">
+					<label>Title</label>
+					<input class="form-control mb-3" type="text" name="writer" value="${board.writer }" readonly="readonly" >
+					</div>
+					<div class="float-right">
+					<button class="btn btn-primary" onclick="location = 'list'">リストへ</button>
+					<button class="btn btn-warning"
+					onclick="location='update?bno=${board.bno}&pageNum=${param.pageNum}&amount=${param.amount}&field=${param.field}&keyword=${param.keyword}'">修正</button>
+					<button data-oper="delete" class="btn btn-danger">削除</button>
+                   	</div>
 			</div>
 			<!-- /.col-lg-12 -->
 		</div>

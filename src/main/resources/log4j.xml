@@ -11,7 +11,7 @@
 	</appender>
 	
 	<!-- Application Loggers -->
-	<logger name="com.haru.controller">
+	<logger name="com.haru">
 		<level value="info" />
 	</logger>
 	
@@ -43,7 +43,7 @@
 	</logger>
 	<!-- Root Logger -->
 	<root>
-		<priority value="warn" />
+		<priority value="info" />
 		<appender-ref ref="console" />
 	</root>
 	

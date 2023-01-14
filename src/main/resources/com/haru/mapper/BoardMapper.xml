@@ -13,6 +13,10 @@
   		bno > 0 ORDER BY bno DESC LIMIT ${(pageNum-1) * amount},#{amount}	
   		]]>
   </select>
+<select id="getBoard" resultType="com.haru.domain.BoardDTO">
+	SELECT * FROM board 
+	WHERE bno = #{bno}
+</select>
   
   <select id="getTotalCount" resultType="int">
   		<![CDATA[
@@ -43,4 +47,23 @@
   			</foreach>
   		</trim>
   	</sql>
+  	
+  	<insert id="insert">
+  		INSERT INTO board(title,content,writer)
+  		VALUES(#{title},#{content},#{writer})
+  	</insert>
+  	
+  	<update id="update">
+  		UPDATE board
+  		SET
+  			title = #{title},
+  			content = #{content},
+  			updateDate = NOW()
+		WHERE bno = #{bno}
+  	</update>
+  	
+  	<delete id="delete">
+  		DELETE FROM board
+  		WHERE bno = #{bno}
+  	</delete>
   </mapper>

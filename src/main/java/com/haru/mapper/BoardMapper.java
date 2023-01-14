@@ -12,4 +12,12 @@ public interface BoardMapper {
 		public List<BoardDTO> getList(Criteria criteria);
 		
 		public int getTotalCount(Criteria criteria);
+		
+		public int insert(BoardDTO dto);
+
+		public BoardDTO getBoard(int bno);
+
+		public int update(BoardDTO dto);
+
+		public int delete(int bno);
 }
