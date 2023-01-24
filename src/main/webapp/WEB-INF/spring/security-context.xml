@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:security="http://www.springframework.org/schema/security"
+	xsi:schemaLocation="http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+<bean id="customAccessDeniedHandler" class="com.haru.security.CustomAccessDeniedHandler"></bean>
+<!-- <bean id="customLoginSuccess" class="com.haru.security.CustomLoginSuccessHandler"></bean> -->
+<bean id="bcryptPasswordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"></bean>
+<bean id="customUserDetailsService" class="com.haru.security.CustomUserDetailsService"></bean>
+<security:http >
+
+<!-- 	<security:intercept-url pattern="/board/list" access="hasRole('ROLE_MEMBER')"/> -->
+<!-- 	<security:intercept-url pattern="/board/write" access="hasRole('ROLE_ADMIN')"/> -->
+	
+	<security:form-login login-page="/user/login"/>
+	<security:logout logout-url="/logout" logout-success-url="/main"  invalidate-session="true" delete-cookies="remember-me,JSESSION_ID"/>
+	<security:remember-me data-source-ref="dataSource" token-validity-seconds="604800"/>
+	
+	<security:access-denied-handler ref="customAccessDeniedHandler"/>
+	<security:session-management invalid-session-url="/user/login">
+		<security:concurrency-control max-sessions="1" expired-url="/user/login"/>
+	</security:session-management>
+</security:http>
+<security:authentication-manager >
+	<security:authentication-provider user-service-ref="customUserDetailsService">
+<!-- 		<security:jdbc-user-service data-source-ref="dataSource" users-by-username-query="SELECT userId,userPassword,enabled  -->
+<!-- 		FROM members WHERE userId = ?"  -->
+<!-- 		authorities-by-username-query="SELECT userId,auth FROM memberAuth WHERE userId = ? "/> -->
+		<security:password-encoder ref="bcryptPasswordEncoder"/>
+	</security:authentication-provider>
+</security:authentication-manager>
+</beans>

@@ -179,7 +179,7 @@ a:hover {
 			.prepend("<input type='hidden' name='bno' value='"+bno+"'>")
 			.attr("action","detail")
 			.submit();
-			console.log(bno);
+			//console.log(bno);
 		});
 		
 	});//function()--end

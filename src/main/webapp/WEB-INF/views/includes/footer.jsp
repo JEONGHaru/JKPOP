@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>    
+
  <!-- Footer -->
             <footer class="sticky-footer bg-white">
                 <div class="container my-auto">
@@ -38,6 +39,13 @@
     </div>
   </div>
 </div>
+<c:if test="${param.logout != null }">
+	<script>
+		$(function(){
+			alert("logoutしました。");
+		});
+	</script>
+</c:if>
   <script type="text/javascript">
 	$(function(){
 		if(history.state) return;
@@ -47,9 +55,17 @@
 		$("#closeModalBtn").on("click",function(){
 			$("#resultModal").modal("hide");
 		})
+		
+		$(".logoutBtn").on("click",function(e){
+			alert("logoutしました");
+			e.preventDefault();
+			$("#logoutForm").submit();
+		});
+		
 	})
 
 </script>
+
 
 
 

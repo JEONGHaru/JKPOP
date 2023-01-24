@@ -26,7 +26,9 @@
 <script src="https://kit.fontawesome.com/462b5b874f.js" crossorigin="anonymous"></script>
     <!-- Custom styles for this template-->
     <link href="/resources/pages/css/sb-admin-2.min.css" rel="stylesheet">
+<style type="text/css">
 
+</style>
 </head>
 <!-- side bar -->
 <%@ include file="includes/sidebar.jsp" %>
@@ -43,52 +45,55 @@
                                 class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
                     </div>
 
+
                     <!-- Content Row -->
-                   <div class="container py-4">
-						<div class="row mt-4">
-							<div class="col-sm-5">
-								<div class="fs-1">
-									<img src="images/korea.png" alt="" />韓アイドル
-								</div>
-								<div id="carouselExampleSlidesOnly" class="carousel slide"
-									data-bs-ride="carousel">
-									<div class="carousel-inner border p-2">
-										<div class="carousel-item active" data-bs-interval="2000">
-											<img src="/resources/images/album/aespa.png" class="d-block w-100" alt="...">
-										</div>
-										<div class="carousel-item ">
-											<img src="${kList.get(1).filePath}" class="d-block w-100" alt="...">
-										</div>
-										<div class="carousel-item">
-											<img src="${kList.get(2).filePath}"
-												class="d-block w-100 lesse" alt="...">
-										</div>
-									</div>
-								</div>
-							</div>
-								<div class="col-sm-5 offset-sm-2">
-									<div class="fs-1">
-										<img src="images/japan.png" alt="" />日アイドル
-									</div>
-					
-									<div id="carouselExampleSlidesOnly" class="carousel slide"
-										data-bs-ride="carousel">
-										<div class="carousel-inner badge border p-2">
-											<div class="carousel-item active" data-bs-interval="2000">
-												<img src="/resources/images/album/ive.png" class="d-block w-100"
-													alt="...">
-											</div>
-											<div class="carousel-item">
-												<img src="${jList.get(1).filePath}" class="d-block w-100"
-													alt="...">
-											</div>
-											<div class="carousel-item">
-												<img src="${jList.get(2).filePath}" class="d-block w-100"
-													alt="...">
-											</div>
-										</div>
-									</div>
-								</div>
+                 <div class="container py-4">
+		<div class="row mt-4">
+			<div class="col-sm-5">
+				<div class="fs-1">
+					<img src="images/korea.png" alt="" />韓アイドル
+				</div>
+				<div id="carouselExampleSlidesOnly" class="carousel slide"
+					data-bs-ride="carousel">
+					<div class="carousel-inner ">
+						<div class="carousel-item active" data-bs-interval="2000">
+							<img src="/resources/images/album/aespa.png" class="d-block w-100" alt="...">
+						</div>
+						<div class="carousel-item ">
+							<img src="/resources/images/album/ive.png" class="d-block w-100" alt="...">
+						</div>
+						<div class="carousel-item">
+							<img src="${kList.get(2).filePath}"
+								class="d-block w-100 lesse" alt="...">
+						</div>
+
+					</div>
+
+				</div>
+			</div>
+			<div class="col-sm-5 offset-sm-2">
+				<div class="fs-1">
+					<img src="images/japan.png" alt="" />日アイドル
+				</div>
+
+				<div id="carouselExampleSlidesOnly" class="carousel slide"
+					data-bs-ride="carousel">
+					<div class="carousel-inner badge border p-2">
+						<div class="carousel-item active" data-bs-interval="2000">
+							<img src="${jList.get(0).filePath}" class="d-block w-100"
+								alt="...">
+						</div>
+						<div class="carousel-item">
+							<img src="${jList.get(1).filePath}" class="d-block w-100"
+								alt="...">
+						</div>
+						<div class="carousel-item">
+							<img src="${jList.get(2).filePath}" class="d-block w-100"
+								alt="...">
+						</div>
+					</div>
+				</div>
+			</div>
 		</div>
 	</div>
 
@@ -346,8 +351,6 @@
     <script src="/resources/pages/vendor/chart.js/Chart.min.js"></script>
 
     <!-- Page level custom scripts -->
-    <script src="/resources/pages/js/demo/chart-area-demo.js"></script>
-    <script src="/resources/pages/js/demo/chart-pie-demo.js"></script>
 <script
 		src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
 		integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"

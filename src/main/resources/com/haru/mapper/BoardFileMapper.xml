@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  <mapper namespace="com.haru.mapper.BoardFileMapper">
+  
+  <select id="findByBno" resultType="com.haru.domain.BoardFileDTO">
+  	SELECT * FROM file
+  	WHERE bno = #{bno}
+  </select>
+  
+  <insert id="insert">
+  	INSERT INTO file(uuid,uploadPath,fileName,fileType,bno)
+  	VALUES(#{uuid},#{uploadPath},#{fileName},#{fileType},#{bno})
+  </insert>
+  
+  <select id="getOldFiles" resultType="com.haru.domain.BoardFileDTO">
+  		<![CDATA[
+  		SELECT * FROM file 
+		WHERE uploadPath = 
+		DATE_FORMAT(ADDDATE(NOW(), INTERVAL -1 DAY),'%Y/%m/%d');
+  		]]>
+  	</select>
+  </mapper>

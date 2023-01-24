@@ -5,7 +5,9 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.haru.domain.BoardDTO;
+import com.haru.domain.BoardFileDTO;
 import com.haru.domain.Criteria;
+import com.haru.mapper.BoardFileMapper;
 import com.haru.mapper.BoardMapper;
 
 import lombok.AllArgsConstructor;
@@ -17,6 +19,7 @@ import lombok.extern.log4j.Log4j;
 public class BoardServiceImpl implements BoardService {
 
 	private BoardMapper mapper;
+	private BoardFileMapper fileMapper;
 	
 	@Override
 	public List<BoardDTO> getList(Criteria cri) {
@@ -36,8 +39,14 @@ public class BoardServiceImpl implements BoardService {
 
 		log.info("BaordService insert---------------- BoardDTO : " + dto);
 		
-		
-		return mapper.insert(dto);
+		int result = mapper.insert(dto);
+		if(dto.getUploadFileList() != null && dto.getUploadFileList().size() >0) {
+			dto.getUploadFileList().forEach(f -> {
+				f.setBno(dto.getBno());
+				fileMapper.insert(f);
+			});
+		}
+		return result;
 	}
 
 	@Override
@@ -61,6 +70,14 @@ public class BoardServiceImpl implements BoardService {
 		log.info("BaordService delete----------------  bno : " +  bno);
 		
 		return mapper.delete(bno) == 1;
+	}
+
+	@Override
+	public List<BoardFileDTO> getFileList(int bno) {
+		log.info("BaordService getFileList----------------  bno : " +  bno);
+		
+		
+		return fileMapper.findByBno(bno);
 	}
 
 }

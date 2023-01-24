@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -43,6 +44,39 @@ textarea {
 </style>    
 <script type="text/javascript">
 	$(function(){
+		var formObj = $("form[role='form']");
+		$("button[type='submit']").on("click",function(e){
+			e.preventDefault();
+			//alert("submit click");
+			var str = "";
+			$(".uploadResult ul li").each(function(i,obj){
+				var jobj = $(obj);
+				console.dir(jobj);
+				//console.log(jobj.data("filename"));
+				//console.log(jObj.data("filename"));
+				str += "<input type='hidden' name='uploadFileList["+i+"].fileName' value='"+jobj.data("filename")+"'>";
+				str += "<input type='hidden' name='uploadFileList["+i+"].uuid' value='"+jobj.data("uuid")+"'>";
+				str += "<input type='hidden' name='uploadFileList["+i+"].uploadPath' value='"+jobj.data("path")+"'>";
+				str += "<input type='hidden' name='uploadFileList["+i+"].fileType' value='"+jobj.data("type")+"'>";
+			});//append input tag -- end
+			formObj.append(str).submit();
+		});//file upload -- end
+		
+		var regEx = new RegExp("(.*?)\.(exe|sh|zip|alz)$","i");
+		var maxSize = 10485760 // 1024 * 1024 * 10 = 10MB
+		
+		function chechExtension(fileName,fileSize){
+			if(fileSize > maxSize){
+				alert("10MB以下のファイルをアップロードしてください");
+				return false;
+			}
+			if(regEx.test(fileName)){
+				alert("そのファイルはアップロードできません");
+				return false;
+			}
+			return true;
+		} //chechExtension -- end
+		
 		var uploadResult = $(".uploadResult ul");
 		function showUploadFile(list){
 			var str = "";
@@ -73,8 +107,10 @@ textarea {
 			
 		}// showUploadFile-- end
 		
+		var csrfHeaderName = "${_csrf.headerName}";
+		var csrfTokenValue = "${_csrf.token}";
 		$("input[type='file']").on("change",function(e){
-			//console.log("ファイル選択");
+			console.log("ファイル選択");
 			var formData = new FormData();
 			console.log(formData);
 			var inputFile = $("input[name='uploadFile']")
@@ -82,26 +118,31 @@ textarea {
 			var files = inputFile[0].files;
 			console.log(files);
 			for(var i = 0; i< files.length; i++){
-				//파일 체크 - 사이즈 , 종
+				//ファイルチェック
+				if(!chechExtension(files[i].name,files[i].size)){
+					return false;
+				}
 				formData.append("uploadFile",files[i]);
 			}
-			
-			//서버에 데이터 넘겨서 처리
 			$.ajax({
 				url : "/uploadAjaxAction",
 				processData : false,
 				contentType : false,
+				beforeSend: function(xhr){
+					xhr.setRequestHeader(csrfHeaderName,csrfTokenValue);
+				},
 				data : formData,
 				type : "POST",
 				dataType : "JSON",
 				success : function(result){
 					console.log(JSON.stringify(result));
-					//업로드 파일 화면에 보이기
+					//ファイル画面に表示
 					showUploadFile(result);
 					//$(".uploadDiv input").val("");
 				}
 			});
 		});//input change -- end
+		
 		$(".uploadResult").on("click",".deleteX",function(e){
 			//alert("Delete Click!")
 			var deleteX = $(this);
@@ -113,6 +154,9 @@ textarea {
 				url: '/deleteFile',
 				data : {fileName :targetFile,
 						type : targetType},
+				beforeSend: function(xhr){
+					xhr.setRequestHeader(csrfHeaderName,csrfTokenValue);
+				},
 				dataType : 'text', //서버에서 결과로 전달되는 데이텨 형식
 				type : "POST",
 				success : function(result){
@@ -137,15 +181,19 @@ textarea {
 		<!-- /.row -->
 		<div class="row mb-4">
 			<div class="col-lg-12">
-				<form action="write" method="POST">
+				<form role="form" action="write" method="POST">
+				<input type="hidden" name="${_csrf.parameterName }" value="${_csrf.token }">
 				<div class="form-group">
-					<input type="hidden" name="writer" value="haru">
 					<label>Title</label>
 					<input class="form-control mb-3" type="text" name="title" required="required" >
 					</div>
 					<div class="form-group">
-					<label>content</label>
+					<label>Content</label>
 					<textarea class="form-control mb-3" rows="3" name="content" required="required" ></textarea>
+					</div>
+					<div class="form-group">
+						<label>Writer</label>
+						<input class="form-control mb-3" name="writer"  value='<sec:authentication property="principal.username"/>' readonly="readonly">
 					</div>
 					<button type="submit" class="btn btn-primary">作成</button>
                    	<button type="reset" class="btn btn-success">リセット</button>
@@ -161,7 +209,7 @@ textarea {
 			<div class="card-body">
 			<!-- 첨부파일 선택 div -> 파일을 선택하면 값이 변경 -> change 이벤트 발생 -->
 				<div class="form-group uploadDiv">
-					<input class="form-control" type="file"  name="uploadFile"multiple>
+					<input class="form-control" type="file"  name="uploadFile" multiple>
 				</div>
 				<div class="uploadResult">
 					<ul></ul>

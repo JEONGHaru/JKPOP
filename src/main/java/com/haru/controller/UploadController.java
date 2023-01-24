@@ -3,6 +3,7 @@ package com.haru.controller;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.nio.file.Files;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -10,13 +11,17 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -31,6 +36,7 @@ import net.coobird.thumbnailator.Thumbnailator;
 public class UploadController {
 
 	
+	@PreAuthorize("isAuthenticated()")
 	@PostMapping(value="uploadAjaxAction" ,produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<UploadFileDTO>> uploadAjax(MultipartFile[] uploadFile) throws Exception{
 		String uploadFolder = "/Users/jeong-gwang-yeong/Desktop/upload/tmp/images";
@@ -83,6 +89,7 @@ public class UploadController {
 		return result;
 	}
 	
+	@PreAuthorize("isAuthenticated()")
 	@PostMapping("/deleteFile")
 	@ResponseBody
 	public ResponseEntity<String> deleteFile(String fileName,String type)throws Exception {
@@ -97,34 +104,68 @@ public class UploadController {
 		if(type.equals("image")) {
 			//String largeFileName = file.getAbsolutePath().replace("s_", "");
 			String largeFileName = file.getAbsolutePath();
-			log.info("썸네일 파일 s_ -------------: "+largeFileName);
 			int pos = largeFileName.lastIndexOf(File.separator);
 			largeFileName = largeFileName.substring(0,pos) + largeFileName.substring(pos).replaceFirst("s_","") ;
 			new File(largeFileName).delete();
-			log.info("s_ 삭제 ---------------------: "+largeFileName);
 		}
 		
 		return new ResponseEntity<String>("success deleted",HttpStatus.OK);
 	}
-
+	
+	@GetMapping(value="/download",produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+	public ResponseEntity<Resource> downloadFile(@RequestHeader("User-Agent") String userAgent, String fileName) throws Exception{
+		String uploadFolder = "/Users/jeong-gwang-yeong/Desktop/upload/tmp/images";
+		ResponseEntity<Resource> entity = null;
+		log.info("download File ------------------ fileName : " + fileName);
+	
+		Resource resource = new FileSystemResource(uploadFolder+File.separator+fileName);
+		
+		if(!resource.exists()) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		
+		String resourceName = resource.getFilename();
+		resourceName = resourceName.substring(resourceName.indexOf("_")+1);
+		HttpHeaders headers = new HttpHeaders();
+		String downloadName = null;
+		
+		//Browser -- IE
+		if(userAgent.contains("Trident")) downloadName = URLEncoder.encode(resourceName,"UTF-8").replaceAll("\\+"," ");
+		//Browser -- Edge(window)
+		else if(userAgent.contains("Edge"))  downloadName = URLEncoder.encode(resourceName,"UTF-8");
+		else downloadName = new String(resourceName.getBytes("UTF-8"),"ISO-8859-1");
+		
+		headers.add("content-disposition","attachment; filename="+downloadName);
+		log.info("headers ----------------- : "+headers);
+		entity = new ResponseEntity<Resource>(resource,headers,HttpStatus.OK);
+		log.info("entity----------------- : "+entity);
+		
+		return entity;
+	}
+	
+	@PostMapping("/uploadAlbum")
+	public void albumImageUpload(MultipartFile file) {
+		log.info("uploadAlbum -----------------");
+		log.info(file.getOriginalFilename());
+		log.info(file.getSize());
+	}
+	
+	//image check
 	private boolean checkImageType(File file) throws Exception {
 		
 		String contentType = Files.probeContentType(file.toPath());
-		
 		log.info("contentType  -------------- : "+contentType);
 		
 		return contentType.startsWith("image");
 	}
-	//날짜 폴더 작성을 위한 메소드 - mapping과는 상관없음
-		private String getFolder() {
-			//jsp의 fmt와 동일
-					SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-					
-					//오늘 날짜 객체 생성
-					Date date = new Date();
-					
-					String str = sdf.format(date);
-					
-					return str.replace("-", File.separator);
+	//日付のフォルダーを作成 - mappingとは関係ない
+	private String getFolder() {
+		
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		
+		//오늘 날짜 객체 생성
+		Date date = new Date();
+		
+		String str = sdf.format(date);
+		
+		return str.replace("-", File.separator);
 		};
 }

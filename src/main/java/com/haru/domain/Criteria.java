@@ -1,5 +1,7 @@
 package com.haru.domain;
 
+import org.springframework.web.util.UriComponentsBuilder;
+
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -29,7 +31,16 @@ public class Criteria {
 	//検索に必要なfileを分け文字別でGetterを作成
 		//-- #{typeArr}
 		public String[] getTypeArr() {
-			//fieldがnullの場合空の配列をnullではない場合文字ずつ出して配列に
+			//fieldがnullの場合空の配列をnull,ではない場合文字ずつ出して配列に
 			return field == null ? new String[]{} : field.split("");
+		}
+		
+		public String getListLink() {
+			UriComponentsBuilder builder = UriComponentsBuilder.fromPath("")
+					.queryParam("PageNum", this.pageNum)
+					.queryParam("amount", this.getAmount())
+					.queryParam("field",this.getField())
+					.queryParam("keyword",this.getKeyword());
+			return builder.toUriString(); 
 		}
 }

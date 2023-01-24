@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
  <!-- Content Wrapper -->
+ <sec:authentication property="principal" var="pinfo"/>
         <div id="content-wrapper" class="d-flex flex-column">
 
             <!-- Main Content -->
@@ -164,7 +166,9 @@
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">Douglas McGee</span>
+                                <sec:authorize access="isAuthenticated()">
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">${pinfo.username }</span>
+                                </sec:authorize>
                                 <img class="img-profile rounded-circle"
                                     src="/resources/pages/img/undraw_profile.svg">
                             </a>
@@ -180,10 +184,20 @@
                                     Settings
                                 </a>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+                                <sec:authorize access="isAnonymous()">
+                                	<a class="dropdown-item" href="/user/login">
+                                		 <i class="fas fa-sign-in-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                                	Login</a>
+                                </sec:authorize>
+                                <sec:authorize access="isAuthenticated()">
+                                <form id="logoutForm" action="/logout" method="POST">
+                                <input type="hidden" name="${_csrf.parameterName }" value="${_csrf.token }">
+                                <button class="dropdown-item logoutBtn" >
                                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Logout
-                                </a>
+                                </button>
+                                </form>
+                                </sec:authorize>
                             </div>
                         </li>
 

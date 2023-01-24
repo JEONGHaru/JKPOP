@@ -1,6 +1,7 @@
 package com.haru.domain;
 
 import java.util.Date;
+import java.util.List;
 
 import lombok.Data;
 
@@ -13,4 +14,6 @@ public class BoardDTO {
 	private String writer;
 	private Date regDate;
 	private Date updateDate;
+	
+	private List<BoardFileDTO> uploadFileList;
 }
