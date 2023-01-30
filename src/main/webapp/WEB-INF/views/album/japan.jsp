@@ -29,16 +29,17 @@
     <!-- Custom styles for this template-->
     <link href="/resources/pages/css/sb-admin-2.min.css" rel="stylesheet">
 <style type="text/css">
-#services .korea{
+#services .japan{
 	width: 125px;
     height: 100px;
     border: 5px solid transparent;
-    border-radius: 90%;
-    background-image: linear-gradient(to top,#083be2 10%,#f21128 );
+    border-radius: 50%;
+    background-image: linear-gradient(to top, #f21128 70%,#ffb199 100%);
     background-origin: border-box;
     background-clip: content-box, border-box;
     margin: 2rem auto;
- }
+    
+}
 
 .myCard{
 	transition: 0.4s ease;
@@ -49,9 +50,6 @@
 	box-shadow: 0 5px 11px 0 rgba(0, 0, 0, 0.18), 0 4px 15px 0
 		rgba(0, 0, 0, 0.15);
 	cursor:pointer;	
-}
-.card-img-top{
-	height: 13rem;
 }
 </style>
 <script type="text/javascript">
@@ -133,14 +131,14 @@ $(function(){
 		<div class="container services">
 			<div class="services-header text-center py-5">
 				<h1 class="diplay-5">韓国アーティスト（${year}年代)</h1>
-				<div class="col divider korea"></div>
+				<div class="col divider japan"></div>
 				<sec:authorize access="hasRole('ROLE_ADMIN')">
 					<form action="uploadAlbum" class="row"  method="POST" enctype="multipart/form-data">
 					<input type="hidden" name="${_csrf.parameterName }" value="${_csrf.token }">
-					<input type="hidden" name="nation" value="korea">
+					<input type="hidden" name="nation" value="japan">
 					<input type="hidden" name="year" value="${year}">
 						<div class="col-auto">
-						<input class="form-control m-1" type="file" name="uploadFile" multiple >
+						<input class="form-control m-1" type="file" name="uploadFile" multiple>
 						</div>
 						<div class="col-auto mx-0">
 							<button class="btn btn-primary" type="submit">登録</button>

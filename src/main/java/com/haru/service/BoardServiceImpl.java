@@ -3,6 +3,7 @@ package com.haru.service;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.haru.domain.BoardDTO;
 import com.haru.domain.BoardFileDTO;
@@ -34,6 +35,7 @@ public class BoardServiceImpl implements BoardService {
 		return mapper.getTotalCount(cri);
 	}
 
+	@Transactional
 	@Override
 	public int insert(BoardDTO dto) {
 
@@ -61,13 +63,27 @@ public class BoardServiceImpl implements BoardService {
 	public boolean update(BoardDTO dto) {
 		log.info("BaordService update----------------  dto : " +  dto);
 		
-		return mapper.update(dto) ==1;
+		fileMapper.deleteAll(dto.getBno());
+		
+		boolean updateResult = mapper.update(dto) ==1;
+		
+		if(updateResult && dto.getUploadFileList() != null && dto.getUploadFileList().size() > 0) {
+			dto.getUploadFileList().forEach(uploadFile -> {
+				uploadFile.setBno(dto.getBno());
+				fileMapper.insert(uploadFile);
+			});
+		}
+		
+		return updateResult;
 		
 	}
 
+	@Transactional
 	@Override
 	public boolean delete(int bno) {
 		log.info("BaordService delete----------------  bno : " +  bno);
+		
+		fileMapper.deleteAll(bno);
 		
 		return mapper.delete(bno) == 1;
 	}

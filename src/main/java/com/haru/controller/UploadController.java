@@ -26,6 +26,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.haru.domain.AlbumDTO;
+import com.haru.domain.AlbumFileDTO;
 import com.haru.domain.UploadFileDTO;
 
 import lombok.extern.log4j.Log4j;
@@ -141,11 +143,22 @@ public class UploadController {
 		return entity;
 	}
 	
-	@PostMapping("/uploadAlbum")
-	public void albumImageUpload(MultipartFile file) {
-		log.info("uploadAlbum -----------------");
-		log.info(file.getOriginalFilename());
-		log.info(file.getSize());
+	
+	
+	public ResponseEntity<byte[]> getAlbumFile(String fileName) throws Exception{
+		ResponseEntity<byte[]> result = null;
+		String uploadFolder = "/Users/jeong-gwang-yeong/Desktop/upload/album";
+		log.info("display fileName================" + fileName);
+		File file = new File(uploadFolder,fileName);
+		
+		HttpHeaders header = new HttpHeaders();
+		
+		header.add("content-type",Files.probeContentType(file.toPath()));
+		
+		result = new ResponseEntity<byte[]>(FileCopyUtils.copyToByteArray(file),header,HttpStatus.OK);
+		
+		return result;
+		
 	}
 	
 	//image check

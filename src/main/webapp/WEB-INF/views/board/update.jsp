@@ -155,7 +155,7 @@ $(function(){
 		if(uploadFile.image){
 			var fileCallPath = encodeURIComponent(uploadFile.uploadPath+"/s_"+uploadFile.uuid +"_"+uploadFile.fileName);
 			
-			str += "<li data-path='"+uploadFile.uploadPath+"' data-uuid='"+uploadFile.uuid+"' data-filename='"+uploadFile.fileName+"' data-type='"+000+"' ><div>";
+			str += "<li data-path='"+uploadFile.uploadPath+"' data-uuid='"+uploadFile.uuid+"' data-filename='"+uploadFile.fileName+"' data-type='"+uploadFile.image+"' ><div>";
 			str += "<span>" + uploadFile.fileName+"</span>";
 			str += "<button type='button' data-file=\'"+fileCallPath+"\' data-type='image' class='btn btn-warning btn-circle'>";
 			str +="<i class='fa-solid fa-trash-can'></i></button><br>"

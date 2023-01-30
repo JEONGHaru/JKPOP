@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  <mapper namespace="com.haru.mapper.AlbumFileMapper">
+  <insert id="insert">
+  	INSERT INTO albumImage(nation,year,fileName,uploadPath)
+  	VALUES(#{nation},#{year},#{fileName},#{uploadPath})
+  </insert>
+  
+  <select id="getImageList"  resultType="com.haru.domain.AlbumFileDTO">
+  	SELECT * FROM albumImage
+  	WHERE nation = #{nation} AND year = #{year}
+  </select>
+  
+  <select id="getImage" resultType="com.haru.domain.AlbumFileDTO">
+  	SELECT * FROM albumImage
+  	WHERE ano = #{ano}
+  </select>
+  
+  <update id="likePlus">
+	UPDATE albumImage 
+	SET likeCnt = likeCnt + 1
+	WHERE ano = #{ano}  
+  </update>
+  
+  <update id="likeCancel">
+  	UPDATE albumImage 
+  	SET likeCnt = likeCnt - 1
+  	WHERE ano = #{ano}
+  </update>
+  
+  <delete id="delete" >
+  	DELETE FROM albumImage
+  	WHERE ano = #{ano}
+  </delete>
+  </mapper>

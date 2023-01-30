@@ -14,6 +14,14 @@
   	VALUES(#{uuid},#{uploadPath},#{fileName},#{fileType},#{bno})
   </insert>
   
+  <delete id="delete">
+  	DELETE FROM file WHERE uuid = #{uuid}
+  </delete>
+  
+  <delete id="deleteAll">
+	DELETE FROM file WHERE bno = #{bno}  
+  </delete>
+  
   <select id="getOldFiles" resultType="com.haru.domain.BoardFileDTO">
   		<![CDATA[
   		SELECT * FROM file 
