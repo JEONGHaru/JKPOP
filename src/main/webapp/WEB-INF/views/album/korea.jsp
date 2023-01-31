@@ -70,7 +70,9 @@ $(function(){
 		$("#modalImage").find("span").text(likeCount);
 		$("#modalImage").find("i").attr("class",likeHerat);
 		$("#myModal").modal("show");
-	});
+	});//myCard click event -- end
+	
+	
 	$(".modalClose").on("click",function(){
 		$("#myModal").modal("hide");
 	});
@@ -198,7 +200,7 @@ $(function(){
 							<button type="button" class="btn-close modalClose" aria-label="Close"></button>
 						</div>
 						<div class="modal-body" id="modalImage">
-						<img class="card-img-top">
+						<img class="card-img">
 								<div class="fs-3 float-end">
 									<span></span><i id="modalHeart" class="fa-regular fa-heart p-1"
 										style="color: red; cursor: poinnter"></i>

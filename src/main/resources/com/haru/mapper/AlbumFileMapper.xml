@@ -34,4 +34,9 @@
   	DELETE FROM albumImage
   	WHERE ano = #{ano}
   </delete>
+  
+  <select id="getMainImage" resultType="com.haru.domain.AlbumFileDTO">
+  	SELECT * FROM albumImage
+  	ORDER BY likeCnt DESC
+  </select>
   </mapper>

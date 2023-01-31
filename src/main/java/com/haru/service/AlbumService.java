@@ -21,5 +21,7 @@ public interface AlbumService {
 
 	public void getLiked(List<AlbumFileDTO> list, String userId);
 
+	public List<AlbumFileDTO> getMainImage();
+
 	
 }

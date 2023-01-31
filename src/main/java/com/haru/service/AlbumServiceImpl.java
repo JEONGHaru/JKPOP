@@ -87,4 +87,11 @@ public class AlbumServiceImpl implements AlbumService {
 		
 	}
 
+	@Override
+	public List<AlbumFileDTO> getMainImage() {
+		log.info("AlbumService getMainImage ------------------");
+		
+		return fileMapper.getMainImage();
+	}
+
 }
