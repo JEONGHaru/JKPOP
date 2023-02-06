@@ -20,5 +20,7 @@ public interface AlbumFileMapper {
 	public void delete(int ano);
 
 	public List<AlbumFileDTO> getMainImage();
+
+	public List<AlbumFileDTO> getImages();
 	
 }

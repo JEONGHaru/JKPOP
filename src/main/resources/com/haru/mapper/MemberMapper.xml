@@ -34,7 +34,9 @@
   	<select id="findByMemberId" resultType="int" >
   		SELECT COUNT(*) FROM members WHERE userId = #{userId} 
   	</select>
-  	
+  	<select id="findByMember" resultType="com.haru.domain.MemberDTO">
+  		SELECT * FROM members WHERE userId = #{userId} AND email = #{email}
+  	</select>
   	<insert id="createMember">
   		INSERT INTO members(userId,userPassword,userFirstName,userLastName,email) 
   		VALUES(#{userId},#{userPassword},#{userFirstName},#{userLastName},#{email})
@@ -43,4 +45,9 @@
   		INSERT INTO memberAuth(userId,auth)
   		VALUES(#{userId},#{auth})
   	</insert>
+  	<update id="resetMemberPw">
+  		UPDATE members
+  		SET userPassword = #{userPassword}
+  		WHERE userId = #{userId}
+  	</update>
   </mapper>

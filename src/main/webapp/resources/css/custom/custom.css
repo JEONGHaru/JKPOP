@@ -1,0 +1,5 @@
+@charset "UTF-8";
+ .bg-image{
+ 	background: url("/randomDisplay") no-repeat;
+ 	background-size:100% 100%;
+ }

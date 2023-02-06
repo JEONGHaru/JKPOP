@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ taglib prefix="c"  uri="http://java.sun.com/jsp/jstl/core"%>    
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -12,7 +12,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Login</title>
+    <title>Change Password</title>
 
     <!-- Custom fonts for this template-->
     <link href="/resources/pages/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -22,8 +22,43 @@
 
     <!-- Custom styles for this template-->
     <link href="/resources/pages/css/sb-admin-2.min.css" rel="stylesheet">
-     <link href="/resources/css/custom/custom.css" rel="stylesheet">
-
+    <link href="/resources/css/custom/custom.css" rel="stylesheet">
+    <script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+<script type="text/javascript">
+$(function(){
+	var pwCheck = false;
+	$("#password").keyup(function(){
+		var pw = $(this).val();
+		var pw2 = $("#password2").val();
+		console.log(pw,pw2);
+		if(pw != pw2){
+			pwCheck = false;
+		}else {
+			pwCheck = true;
+		}
+	})//password keyup -- end
+	$("#password2").keyup(function(){
+		var pw = $("#password").val();
+		var pw2 = $(this).val();
+		console.log(pw,pw2);
+		if(pw != pw2){
+			$("#pwCheckResult").text("パスワードが一致しません");
+			pwCheck = false;
+		}else {
+			$("#pwCheckResult").text("");
+			pwCheck = true;
+		}
+	})//password keyup -- end
+	$("#changePwForm").submit(function(){
+		if(!pwCheck) {
+			$("#pwCheckResult").text("パスワードが一致しません");
+			return false;
+		}
+		
+	})
+})
+</script>
 </head>
 
 <body class="bg-gradient-primary">
@@ -43,43 +78,35 @@
                             <div class="col-lg-6">
                                 <div class="p-5">
                                     <div class="text-center">
-                                        <h1 class="h4 text-gray-900 mb-4">ログイン</h1>
+                                        <h1 class="h4 text-gray-900 mb-2">パスワード変更</h1>
+                                        <p class="mb-4">新しいパスワードを入力してください</p>
                                     </div>
-                                    <form class="user" method="POST" action="/login">
-                                    <input type="hidden" name="${_csrf.parameterName }" value="${_csrf.token }">
-                                        <div class="form-group">
-                                            <input type="text" class="form-control form-control-user"
-                                               name="username" placeholder="ID" autofocus>
-                                        </div>
+                                    <form id="changePwForm" class="user" method="POST" action="changePw">
+                                    <div class="form-group">
+                                    	<input type="hidden" name="${_csrf.parameterName }" value="${_csrf.token }">
+                                    	<input type="hidden" name="userId" value="<sec:authentication property='principal.username'/>"/>
+                                    	<input class="form-control form-control-user"  id="password" type="password" name="userPassword"
+                                    	 placeholder="パスワード" min="10"  required>
+                                    </div>
                                         <div class="form-group">
                                             <input type="password" class="form-control form-control-user"
-                                                id="exampleInputPassword" placeholder="パスワード" name="password">
+                                                id="password2" name="email"  placeholder="パスワード（再確認）" min="10"  required>
                                         </div>
+                                        <div id="pwCheckResult" class="text-danger">
                                         	
-                                        <div class="form-group">
-                                            <div class="custom-control custom-checkbox small">
-                                                <input type="checkbox" class="custom-control-input" id="customCheck" name="remember-me">
-                                                <label class="custom-control-label" for="customCheck">Remember
-                                                    Me</label>
-                                            </div>
                                         </div>
-                                        <button  class="btn btn-primary btn-user btn-block">
-                                            Login
+                                        <button id="resetBtn" class="btn btn-primary btn-user btn-block">
+                                            Reset Password
                                         </button>
                                     </form>
-                                    <input type="hidden" value="${result }">
-                                    <c:if test="${not empty result}">
-                                    	<p class="text-danger">${result }
-                                    </c:if>	
                                     <hr>
-                                    <div class="text-center">
-                                        <a class="small" href="forgotPassword">パスワードを忘れた方</a>
-                                    </div>
                                     <div class="text-center">
                                         <a class="small" href="register">会員登録</a>
                                     </div>
-                                    <hr>
                                     <div class="text-center">
+                                        <a class="small" href="login.html">ログインページへ</a>
+                                        	<hr>
+                                        	 <div class="text-center">
                                         <a class="small" href="/main">ホームへ戻る</a>
                                     </div>
                                 </div>
@@ -103,15 +130,6 @@
 
     <!-- Custom scripts for all pages-->
     <script src="/resources/pages/js/sb-admin-2.min.js"></script>
-<script type="text/javascript">
-
-	$(".btn-user").on("click",function(e){
-		//alert("login button clicck")
-		e.preventDefault();
-		$("form").submit();
-	});
-
-</script>
 </body>
 
 </html>

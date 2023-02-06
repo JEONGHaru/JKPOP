@@ -1,6 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ taglib prefix="c"  uri="http://java.sun.com/jsp/jstl/core"%>    
 <!DOCTYPE html>
 <html lang="en">
 
@@ -12,7 +11,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Login</title>
+    <title>Forgot Password</title>
 
     <!-- Custom fonts for this template-->
     <link href="/resources/pages/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -22,8 +21,20 @@
 
     <!-- Custom styles for this template-->
     <link href="/resources/pages/css/sb-admin-2.min.css" rel="stylesheet">
-     <link href="/resources/css/custom/custom.css" rel="stylesheet">
-
+    <link href="/resources/css/custom/custom.css" rel="stylesheet">
+    <script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+<script type="text/javascript">
+var doForgotPassword = false;
+function forgotPwSubmit(form){
+	if(doForgotPassword){
+		alert("処理中です");
+		return;
+	}
+	form.submit();
+	doForgotPassword = true;
+}
+</script>
 </head>
 
 <body class="bg-gradient-primary">
@@ -43,43 +54,31 @@
                             <div class="col-lg-6">
                                 <div class="p-5">
                                     <div class="text-center">
-                                        <h1 class="h4 text-gray-900 mb-4">ログイン</h1>
+                                        <h1 class="h4 text-gray-900 mb-2">パスワードを忘れた方</h1>
+                                        <p class="mb-4">登録されたIDとEメールを入力してください</p>
                                     </div>
-                                    <form class="user" method="POST" action="/login">
-                                    <input type="hidden" name="${_csrf.parameterName }" value="${_csrf.token }">
+                                    <form class="user" method="POST" action="forgotPassword" onsubmit="forgotPwSubmit(this);return false;">
+                                    <div class="form-group">
+                                    	<input type="hidden" name="${_csrf.parameterName }" value="${_csrf.token }">
+                                    	<input class="form-control form-control-user" type="text" name="userId" placeholder="ID">
+                                    </div>
                                         <div class="form-group">
-                                            <input type="text" class="form-control form-control-user"
-                                               name="username" placeholder="ID" autofocus>
+                                            <input type="email" class="form-control form-control-user"
+                                                id="exampleInputEmail" name="email" aria-describedby="emailHelp"
+                                                placeholder="Eメール">
                                         </div>
-                                        <div class="form-group">
-                                            <input type="password" class="form-control form-control-user"
-                                                id="exampleInputPassword" placeholder="パスワード" name="password">
-                                        </div>
-                                        	
-                                        <div class="form-group">
-                                            <div class="custom-control custom-checkbox small">
-                                                <input type="checkbox" class="custom-control-input" id="customCheck" name="remember-me">
-                                                <label class="custom-control-label" for="customCheck">Remember
-                                                    Me</label>
-                                            </div>
-                                        </div>
-                                        <button  class="btn btn-primary btn-user btn-block">
-                                            Login
+                                        <button id="resetBtn" class="btn btn-primary btn-user btn-block">
+                                            Reset Password
                                         </button>
                                     </form>
-                                    <input type="hidden" value="${result }">
-                                    <c:if test="${not empty result}">
-                                    	<p class="text-danger">${result }
-                                    </c:if>	
                                     <hr>
-                                    <div class="text-center">
-                                        <a class="small" href="forgotPassword">パスワードを忘れた方</a>
-                                    </div>
                                     <div class="text-center">
                                         <a class="small" href="register">会員登録</a>
                                     </div>
-                                    <hr>
                                     <div class="text-center">
+                                        <a class="small" href="login.html">ログインページへ</a>
+                                        	<hr>
+                                        	 <div class="text-center">
                                         <a class="small" href="/main">ホームへ戻る</a>
                                     </div>
                                 </div>
@@ -103,15 +102,6 @@
 
     <!-- Custom scripts for all pages-->
     <script src="/resources/pages/js/sb-admin-2.min.js"></script>
-<script type="text/javascript">
-
-	$(".btn-user").on("click",function(e){
-		//alert("login button clicck")
-		e.preventDefault();
-		$("form").submit();
-	});
-
-</script>
 </body>
 
 </html>

@@ -13,4 +13,8 @@ public interface MemberMapper {
 
 	public void authorizeMember(AuthDTO dto);
 
+	public MemberDTO findByMember(MemberDTO dto);
+
+	public int resetMemberPw(MemberDTO dto);
+
 }

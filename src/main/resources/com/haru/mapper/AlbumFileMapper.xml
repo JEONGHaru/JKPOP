@@ -39,4 +39,8 @@
   	SELECT * FROM albumImage
   	ORDER BY likeCnt DESC
   </select>
+  
+  <select id="getImages" resultType="com.haru.domain.AlbumFileDTO">
+  	SELECT * FROM albumImage
+  </select>
   </mapper>

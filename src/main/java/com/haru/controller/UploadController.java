@@ -11,6 +11,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -29,7 +30,9 @@ import org.springframework.web.multipart.MultipartFile;
 import com.haru.domain.AlbumDTO;
 import com.haru.domain.AlbumFileDTO;
 import com.haru.domain.UploadFileDTO;
+import com.haru.service.AlbumService;
 
+import lombok.Setter;
 import lombok.extern.log4j.Log4j;
 import net.coobird.thumbnailator.Thumbnailator;
 
@@ -37,6 +40,8 @@ import net.coobird.thumbnailator.Thumbnailator;
 @Log4j
 public class UploadController {
 
+	@Setter(onMethod_ = @Autowired)
+	private AlbumService albumService;
 	
 	@PreAuthorize("isAuthenticated()")
 	@PostMapping(value="uploadAjaxAction" ,produces = MediaType.APPLICATION_JSON_VALUE)
@@ -81,6 +86,21 @@ public class UploadController {
 		String uploadFolder = "/Users/jeong-gwang-yeong/Desktop/upload/tmp/images";
 		log.info("display fileName================" + fileName);
 		File file = new File(uploadFolder,fileName);
+		
+		HttpHeaders header = new HttpHeaders();
+		
+		header.add("content-type",Files.probeContentType(file.toPath()));
+		
+		result = new ResponseEntity<byte[]>(FileCopyUtils.copyToByteArray(file),header,HttpStatus.OK);
+		
+		return result;
+	}
+	@GetMapping("/randomDisplay")
+	public ResponseEntity<byte[]> getFile() throws Exception{
+		ResponseEntity<byte[]> result = null;
+		String uploadFolder = "/Users/jeong-gwang-yeong/Desktop/upload/album";
+		String imagePath = albumService.getRandomImage();
+		File file = new File(uploadFolder,imagePath);
 		
 		HttpHeaders header = new HttpHeaders();
 		

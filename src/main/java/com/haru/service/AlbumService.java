@@ -23,5 +23,7 @@ public interface AlbumService {
 
 	public List<AlbumFileDTO> getMainImage();
 
+	public String getRandomImage();
+
 	
 }

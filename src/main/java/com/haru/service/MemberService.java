@@ -8,5 +8,9 @@ public interface MemberService {
 
 	public int findByMemberid(String userId);
 
+	public MemberDTO findByMemberPw(MemberDTO dto);
+
+	public int changeMemberPw(MemberDTO dto);
+
 	
 }

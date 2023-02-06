@@ -3,6 +3,7 @@ package com.haru.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,7 +33,7 @@ public class MemberController {
 		log.info("login----------------------------");
 		log.info("login---------------------------- error : " + error);
 		if(error != null) {
-			model.addAttribute(model);
+			model.addAttribute("result","IDもしくはPASSWORDが一致しません");
 		}
 		log.info("login---------------------------- logout : " + logout);
 	}
@@ -78,5 +79,42 @@ public class MemberController {
 		}
 		
 		return result; 
+	}
+	
+	
+	@GetMapping("forgotPassword")
+	public void forgotPasswordForm() {
+		log.info("MemberController forgotPassword -------------------------- ");
+	}
+	
+	@PreAuthorize("isAnonymous()")
+	@PostMapping("forgotPassword")
+	public String forgotPassword(MemberDTO dto,RedirectAttributes rttr) {
+		log.info("MemberController forgotPassword -------------------------- dto : " + dto);
+		
+		MemberDTO result = service.findByMemberPw(dto);
+		log.info("MemberController forgotPassword -------------------------- result : " + result);
+		if(result != null) {
+			rttr.addFlashAttribute("result",dto.getEmail()+"に臨時パスワードを送信しました");
+			return "redirect:/main";
+		}
+		return "redirect:forgotPassword";
+	}
+	
+	@PreAuthorize("isAuthenticated()")
+	@GetMapping("changePw")
+	public void changePasswordForm() {
+		log.info("MemberController changePasswordForm --------------------------");
+	}
+	
+	@PreAuthorize("isAuthenticated()")
+	@PostMapping("changePw")
+	public String changeMemberPassword(MemberDTO dto, RedirectAttributes rttr) {
+		log.info("MemberController changeMemberPassword -------------------------- MemberDTO : " + dto);
+		if(service.changeMemberPw(dto) == 1) {
+			rttr.addFlashAttribute("result","パスワードを変更しました");
+		}
+		
+		return "redirect:/main";
 	}
 }

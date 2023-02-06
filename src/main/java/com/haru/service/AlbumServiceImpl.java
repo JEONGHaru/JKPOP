@@ -1,6 +1,8 @@
 package com.haru.service;
 
+import java.io.File;
 import java.util.List;
+import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -92,6 +94,17 @@ public class AlbumServiceImpl implements AlbumService {
 		log.info("AlbumService getMainImage ------------------");
 		
 		return fileMapper.getMainImage();
+	}
+
+	@Override
+	public String getRandomImage() {
+		
+		List<AlbumFileDTO> list = fileMapper.getImages();
+		Random ran = new Random();
+		int ranIndex = ran.nextInt(list.size());
+		String result =list.get(ranIndex).getUploadPath()+File.separator+list.get(ranIndex).getFileName();
+		
+		return result;
 	}
 
 }

@@ -22,6 +22,9 @@
     <!-- Custom styles for this template-->
     <link href="/resources/pages/css/sb-admin-2.min.css" rel="stylesheet">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <link href="/resources/css/custom/custom.css" rel="stylesheet">
+
+    
 <script type="text/javascript">
 	$(function(){
 		var idChecked = false;
@@ -108,7 +111,7 @@
             <div class="card-body p-0">
                 <!-- Nested Row within Card Body -->
                 <div class="row">
-                    <div class="col-lg-5 d-none d-lg-block bg-register-image"></div>
+                    <div class="col-lg-5 d-none d-lg-block bg-image"></div>
                     <div class="col-lg-7">
                         <div class="p-5">
                             <div class="text-center">
@@ -159,7 +162,7 @@
                             </form>
                             <hr>
                             <div class="text-center">
-                                <a class="small" href="forgot-password.html">パスワードを忘れた方</a>
+                                <a class="small" href="forgotPassword">パスワードを忘れた方</a>
                             </div>
                             <div class="text-center">
                                 <a class="small" href="login.html">ログインページへ</a>
